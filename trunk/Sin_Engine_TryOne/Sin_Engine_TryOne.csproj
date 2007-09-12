@@ -41,11 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\LogHandler.cs" />
-    <Compile Include="Model.cs" />
-    <Compile Include="SinGameEngineForm.cs">
+    <Compile Include="Render\Model.cs" />
+    <Compile Include="GameLogic\SinGameEngineForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SinGameEngineForm.Designer.cs">
+    <Compile Include="GameLogic\SinGameEngineForm.Designer.cs">
       <DependentUpon>SinGameEngineForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -55,7 +55,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SinGameEngineForm.resx">
+    <EmbeddedResource Include="GameLogic\SinGameEngineForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SinGameEngineForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -72,6 +72,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="UnitTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
