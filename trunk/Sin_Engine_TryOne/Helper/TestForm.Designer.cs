@@ -1,6 +1,6 @@
-namespace Sin_Engine_TryOne
+namespace Sin_Engine_TryOne.Helper
 {
-    partial class SinGameEngineForm
+    partial class TestForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,13 +30,13 @@ namespace Sin_Engine_TryOne
         {
             this.SuspendLayout();
             // 
-            // SinGameEngineForm
+            // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 453);
-            this.Name = "SinGameEngineForm";
-            this.Text = "Sin Game Engine Form";
+            this.Name = "TestForm";
+            this.Text = "TestForm";
             this.ResumeLayout(false);
 
         }
@@ -44,4 +44,3 @@ namespace Sin_Engine_TryOne
         #endregion
     }
 }
-

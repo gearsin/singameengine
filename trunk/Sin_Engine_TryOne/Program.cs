@@ -40,7 +40,7 @@ namespace Sin_Engine_TryOne
             Application.SetCompatibleTextRenderingDefault(false);
 
 #if DEBUG
-            UnitTesting.StatTest(UnitTesting.eTestModule.eGameFormTest);
+            UnitTesting.StatTest(UnitTesting.eTestModule.eGameTest);
 #else
             //Place holder
             //To be replace to exact game loop

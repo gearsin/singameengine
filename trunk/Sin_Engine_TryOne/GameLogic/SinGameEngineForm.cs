@@ -9,11 +9,13 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using Microsoft.DirectX.Direct3D;
 using Microsoft.DirectX;
+using Sin_Engine_TryOne.Input;
+using Sin_Engine_TryOne.GameLogic;
 #endregion
 
 namespace Sin_Engine_TryOne
 {
-    public partial class SinGameEngineForm : Form
+    public class SinGameEngineForm : Form
     {
 
         /// <summary>
@@ -21,9 +23,19 @@ namespace Sin_Engine_TryOne
         /// </summary>
         #region Variables
         bool isNotClosed = true;
+
+        ///<summary>
+        /// DirectX Device 
+        ///</summary>
+        
         protected static Device m_dxdevice = null;
+
+        /// <summary>
+        ///  font rendering 
+        /// </summary>
         public static Microsoft.DirectX.Direct3D.Font textFont;
         public static Sprite textFontSprite;
+
         /// <summary>
         /// Use a standard field of view of 90 degrees, and use 1 for near plane
         /// and 1000 for far plane. Field of view might be changed for speed items.
@@ -33,9 +45,19 @@ namespace Sin_Engine_TryOne
             farPlane = 100.0f;
 
         /// <summary>
-        /// World, view and projection martix, also used for the shaders!
+        /// Camera for everything (Menu or any type of camera)
         /// </summary>
-        //private static Matrix worldMatrix, viewMatrix, projectionMatrix;
+        public Camera m_Camera = new Camera(new Vector3(0, 0, -5));
+
+        ///<summary>
+        /// handle keyboard input
+        ///</summary>
+        protected static KeyboardInput m_KeyboardHandler;
+
+        /// <summary>
+        /// World, view and projection matrix, also used for the shaders!
+        /// </summary>
+        private static Matrix m_worldMatrix, m_viewMatrix, m_projectionMatrix;
 
         #endregion
 
@@ -46,17 +68,110 @@ namespace Sin_Engine_TryOne
         public SinGameEngineForm()
         {
             InitializeComponent();
+        
             InitializeDirectX();
+            BuildProjectionMatrix();
+            IntializeFontSystem();
+
+            //intialize the input system
+            m_KeyboardHandler = new KeyboardInput( this );
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// set / get world matrix
+        /// </summary>
+        /// <returns> Matrix</returns>
+        public static Matrix WorldMatrix
+        {
+             get{
+                 return m_worldMatrix;
+             } // get
+            set{
+
+                 if( m_worldMatrix != value)
+                 {
+                     m_worldMatrix = value;
+                     m_dxdevice.Transform.World = m_worldMatrix;
+                 } // if
+            } //set 
+        }//WorldMatrix
+
+        /// <summary>
+        /// get/set view matrix
+        /// </summary>
+        /// <returns> Matrix</returns>
+        public static Matrix ViewMatrix
+        {
+            get{
+                return m_viewMatrix;
+            }//get
+            set{
+                //always set
+                m_viewMatrix = value;
+                m_dxdevice.Transform.View = m_viewMatrix;
+            }//set
+        }// View Matrix
+
+        /// <summary>
+        /// get inverse view matrix
+        /// </summary>
+        /// <returns> Matrix</returns>
+        public static Matrix InverseViewMatrix
+        {
+            get{
+                return Matrix.Invert(m_viewMatrix);
+            }//get
+        }// InverseViewMatrix
+
+        /// <summary>
+        /// get camera position from view matrix
+        /// </summary>
+        public Vector3 CameraPos
+        {
+            get{
+                //Matrix invView = InverseViewMatrix;
+                //return (Vector3(invView.M41, invView.M42, invView.M43));
+                return new Vector3( -m_viewMatrix.M41, -m_viewMatrix.M42, -m_viewMatrix.M43);
+            }//get 
+        }//CameraPos
+
+
+        /// <summary>
+        /// get/set projection matirx
+        /// </summary>
+        public static Matrix ProjectionMatrix
+        {
+            get{
+                return m_projectionMatrix; 
+            }//get
+            set{
+                m_projectionMatrix = value;
+                m_dxdevice.Transform.Projection = m_projectionMatrix;
+            }//set
+        }//ProjectionMatrix
+
+
+        /// <summary>
+        /// Get keyboard handler
+        /// </summary>
+        public static KeyboardInput Keyboard
+        {
+            get
+            {
+                return m_KeyboardHandler;
+            }
         }
         #endregion
 
 
         #region Event
-            protected override void OnClosed(EventArgs e)
+        protected override void OnClosed(EventArgs e)
         {
-            base.OnClosed(e);
             Program.log.CloseLog();
             isNotClosed = false;
+            base.OnClosed(e);
         }
         protected override void OnResize(EventArgs e)
         {
@@ -67,6 +182,11 @@ namespace Sin_Engine_TryOne
 
         #region Method
 
+        protected override void  Dispose(bool disposing)
+        {
+ 	       System.Console.WriteLine("I am dying"); 
+           base.Dispose(disposing);
+        }
         /// <summary>
         /// Intialize all DirectX component
         /// </summary>
@@ -126,8 +246,6 @@ namespace Sin_Engine_TryOne
             }
 
 
-            BuildProjectionMatrix();
-            IntializeFontSystem();
         }
         #endregion
 
@@ -143,17 +261,18 @@ namespace Sin_Engine_TryOne
                 // Leave world matrix to the standard identity
                 m_dxdevice.Transform.World = Matrix.Identity;
                 // Create view and projection matrices (default stuff)
-                m_dxdevice.Transform.View = Matrix.LookAtLH(
+                m_viewMatrix = Matrix.LookAtLH(
                     new Vector3(-50.0f, -20.0f, -4.0f),
                     new Vector3(0.0f, 0.0f, 0.0f),
                     new Vector3(0.0f, 1.0f, 0.0f));
 
+                m_dxdevice.Transform.View = m_viewMatrix;
                 float aspectRatio = 1.0f;
                 if (this.Height != 0)
                     aspectRatio = (float)this.Width / (float)this.Height;
                
-                 m_dxdevice.Transform.Projection = Matrix.PerspectiveFovLH( fieldOfView, aspectRatio, 
-                                                                             nearPlane, farPlane);
+                 m_projectionMatrix = Matrix.PerspectiveFovLH( fieldOfView, aspectRatio, nearPlane, farPlane);
+                 m_dxdevice.Transform.Projection = m_projectionMatrix;
             }
         } // BuildProjectionMatrix()
         #endregion
@@ -212,7 +331,21 @@ namespace Sin_Engine_TryOne
             m_dxdevice.RenderState.ZBufferEnable = true;
         }
 
+        /// <summary>
+        /// Update the game logic every frame.
+        /// this must be done before rendering
+        /// </summary>
+        #region Update 
+        protected void UpdateGameLoop()
+         {
+             m_KeyboardHandler.Update();
+             m_Camera.Update();
+         }
+
         #endregion
+        #endregion
+
+
         /// <summary>
         // In this region all unit testing is done
         // testing engine rendering features
@@ -243,7 +376,7 @@ namespace Sin_Engine_TryOne
             while(testForm.isNotClosed)
             {
                 Application.DoEvents();
-
+                testForm.UpdateGameLoop();
                 testForm.Render(
                           delegate
                           {
@@ -259,7 +392,26 @@ namespace Sin_Engine_TryOne
 
 
 
-        }//TestGraphicEngineForm()
+        }        //TestGraphicEngineForm()
+
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // SinGameEngineForm
+            // 
+            this.ClientSize = new System.Drawing.Size(632, 453);
+            this.Name = "SinGameEngineForm";
+            this.Load += new System.EventHandler(this.SinGameEngineForm_Load);
+            this.ResumeLayout(false);
+
+        }
+
+        private void SinGameEngineForm_Load(object sender, EventArgs e)
+        {
+
+        }
         #endregion
     }
 }

@@ -1,6 +1,9 @@
+#region Directives
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Sin_Engine_TryOne.Input;
+#endregion
 
 namespace Sin_Engine_TryOne
 {
@@ -13,9 +16,10 @@ namespace Sin_Engine_TryOne
         /// </summary>
        public enum eTestModule
         {
-            eGameFormTest,
+            eGameTest,
             eCameraTest,
             eXMLLogTest,
+            eKeyboardTest
             //More to come...
         };
         #endregion
@@ -36,7 +40,7 @@ namespace Sin_Engine_TryOne
             switch(ewhichModule)
             {
                 default:
-                case eTestModule.eGameFormTest:
+                case eTestModule.eGameTest:
                     SinGameEngineForm.TestGraphicEngineForm();
                     break;
                 case eTestModule.eCameraTest:
@@ -44,6 +48,9 @@ namespace Sin_Engine_TryOne
                     break;
                 case eTestModule.eXMLLogTest:
                     Program.TestXMLLogSystem();
+                    break;
+                case eTestModule.eKeyboardTest:
+                    KeyboardInput.TestKeyboardInput();
                     break;
                 
 
