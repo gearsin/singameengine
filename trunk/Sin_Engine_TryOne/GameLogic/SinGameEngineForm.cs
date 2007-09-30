@@ -375,7 +375,6 @@ namespace Sin_Engine_TryOne
             //Render Loop
             while(testForm.isNotClosed)
             {
-                Application.DoEvents();
                 testForm.UpdateGameLoop();
                 testForm.Render(
                           delegate
@@ -388,6 +387,8 @@ namespace Sin_Engine_TryOne
                               //Render Text 
                               testForm.RenderTextOnScreen("~~~Test Font system!!!!");
                           });
+
+                    Application.DoEvents();
             }
 
 
