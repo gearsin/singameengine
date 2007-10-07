@@ -55,6 +55,7 @@
     <Compile Include="Graphics\GameFont.cs" />
     <Compile Include="Graphics\Model.cs" />
     <Compile Include="Helper\Junk.cs" />
+    <Compile Include="Properties\GameSettings.cs" />
     <Compile Include="Properties\GameSettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
