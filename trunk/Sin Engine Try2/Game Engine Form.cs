@@ -17,6 +17,7 @@ using Sin_Engine.Properties;
 using Microsoft.DirectX;
 using Sin_Engine.Graphics;
 using Sin_Engine.Helper;
+using Sin_Engine.GameLogic;
 #endregion
 
 namespace Sin_Engine
@@ -63,11 +64,21 @@ namespace Sin_Engine
            GameFont gameInfo = null;
 
            //place holder
-           Junk skyBox  = null; 
+           Junk skyBox  = null;
+
+           GameCamera camera; 
+
            /// <summary>
            /// World, view and projection matrix, also used for the shaders!
            /// </summary>
            private static Matrix mWorldMatrix, mViewMatrix, mProjectionMatrix;
+        	
+            /// <summary>
+        	/// Precalculated view projection matrix for the Convert 3D Point To 2D point ,
+		    /// IsInFrontOfCamera and IsVisible methods. Calculated in ViewMatrix.
+		    /// </summary>
+
+           private static Matrix mViewProjMatrix;
         #endregion
         
         ///<summary>
@@ -81,12 +92,76 @@ namespace Sin_Engine
         #endregion
 
         #region Properties
+        /// <summary>
+        /// return the DirectX device
+        /// </summary>
         public static Device DirectXDevice
         {
             get{
                 return graphics;
             }
         }
+
+        /// <summary>
+        /// set or get world matrix
+        /// </summary>
+        public static Matrix WorldMatrix
+        {
+            get{
+                return mWorldMatrix;
+            }
+            set {
+                if( mWorldMatrix != value)
+                {
+                    mWorldMatrix = value;
+                    graphics.Transform.World = mWorldMatrix;
+                }
+            }
+        }
+
+        /// <summary>
+        /// set or get view matrix
+        /// </summary>
+        public static Matrix ViewMatrix
+        {
+            get{
+                return mViewMatrix;
+            }
+            set{
+                mViewMatrix = value;
+                graphics.Transform.View = mViewMatrix;
+                
+                //calculate the view projection matrix
+                mViewProjMatrix = mViewMatrix * mProjectionMatrix;
+            }
+        }
+
+        public static Matrix ProjectionMatrix
+        {
+            get{
+                return mProjectionMatrix;
+            }
+            set {
+                mProjectionMatrix = value;
+                graphics.Transform.Projection = mProjectionMatrix;
+            }
+        }
+       public static Matrix InverseViewMatrix
+       {
+           get{
+               return Matrix.Invert(mViewMatrix);
+           }
+       }
+       
+        public static Vector3 CameraPos
+        {
+            get{
+                Matrix invView = InverseViewMatrix;
+                return new Vector3(invView.M41, invView.M42, invView.M43);
+                //retunr new Vector3( mViewMatrix.M41, mViewMatrix.M42, mViewMatirx.43);
+            }
+        }
+
         #endregion
         #region Methods
         ///<summary>
@@ -289,7 +364,7 @@ namespace Sin_Engine
         /// </summary>
         void UpdateGame()
         {
-
+            camera.Update();
         }
 
         /// <summary>
@@ -298,9 +373,14 @@ namespace Sin_Engine
         /// <returns></returns>
         bool LoadGameResources()
         {
+            ///<summary>
+            /// setup the camera
+            ///</summary>
+            camera = new GameCamera();
             rocket = new Entity3D( "game data\\Models\\Rocket.x" );
             gameInfo = new GameFont();
             skyBox = new Junk();
+
             return true;
         }
         ///<summary>
@@ -384,6 +464,8 @@ namespace Sin_Engine
             if ((int)e.KeyChar == (int)System.Windows.Forms.Keys.Escape)
             {
                 isClosed = true;
+                //call to shutdown the engine
+                this.Dispose();
             }
 
             if ((int)e.KeyChar == (int)System.Windows.Forms.Keys.Space && isGamePaused)
@@ -392,6 +474,20 @@ namespace Sin_Engine
             }
             else
                 isGamePaused = true;
+
+           /* int iKeyPressed = (int)e.KeyChar;
+            switch( iKeyPressed )
+            {
+                case (int)System.Windows.Forms.Keys.W :
+                case (int)System.Windows.Forms.Keys.Up:
+                    camera.Move(GameCamera.eMoveDirection.ZDir, -0.2f);
+                    break;
+                case (int)System.Windows.Forms.Keys.S:
+                case (int)System.Windows.Forms.Keys.Down:
+                    camera.Move(GameCamera.eMoveDirection.ZDir, -0.2f);
+                    break;
+
+            }*/
         }
         #endregion
 
