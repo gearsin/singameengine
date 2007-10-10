@@ -80,6 +80,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Shaders\PreScreenSkyCubeMapping.cs" />
+    <Compile Include="UnitTesting.cs" />
     <None Include="app.config" />
     <None Include="Properties\GameSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
