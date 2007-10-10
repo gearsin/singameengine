@@ -36,7 +36,7 @@ namespace Sin_Engine.GameLogic
         public enum eMoveDirection
         {
             //Move left/right direction
-            Xdir,
+            XDir,
             /// <summary>
             ///Move Up/Down direction
             /// </summary>
@@ -181,7 +181,7 @@ namespace Sin_Engine.GameLogic
             /// <param name="amount"></param>
             public void Move( eMoveDirection moveDir, float amount)
             {
-                Vector3 dir = moveDir == eMoveDirection.Xdir ? XAxis :
+                Vector3 dir = moveDir == eMoveDirection.XDir ? XAxis :
                               moveDir == eMoveDirection.YDir ? YAxis : ZAxis;
                 vcamPos += dir * amount;
             }
@@ -189,7 +189,7 @@ namespace Sin_Engine.GameLogic
             public void Rotate( eRotationAxis rotAxis, float angle)
             {
                 Vector3 axis = rotAxis == eRotationAxis.Pitch ? new Vector3( 1.0f, 0.0f, 0.0f) :
-                               rotAxis == eRotationAxis.Roll  ? new Vector3( 0.0f, 1.0f, 0.0f) :        
+                               rotAxis == eRotationAxis.Yaw  ? new Vector3( 0.0f, 1.0f, 0.0f) :        
                                            new Vector3( 0.0f, 0.0f, 1.0f);
                 Rotate(axis, angle);
             }   

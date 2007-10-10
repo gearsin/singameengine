@@ -29,5 +29,14 @@
     <Setting Name="fontSize" Type="System.Single" Scope="User">
       <Value Profile="(Default)">15</Value>
     </Setting>
+    <Setting Name="moveCamera" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="rotateCamera" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="mouseRoateFactor" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">0.015</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

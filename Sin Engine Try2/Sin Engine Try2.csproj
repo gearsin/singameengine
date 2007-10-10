@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Device\graphics.cs" />
+    <Compile Include="Devices\graphics.cs" />
+    <Compile Include="Devices\Keyboard.cs" />
+    <Compile Include="Devices\Mouse.cs" />
     <Compile Include="Game Engine Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,6 +79,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Shaders\PreScreenSkyCubeMapping.cs" />
     <None Include="app.config" />
     <None Include="Properties\GameSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
