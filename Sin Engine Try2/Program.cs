@@ -12,7 +12,7 @@ namespace Sin_Engine
         ///<summary>
         /// the main game Object
         /// </summary>
-        //public static GameForm game = nu;// = new GameForm()    
+        static GameForm game = null;// = new GameForm()    
         #endregion
 
         #region Method
@@ -23,10 +23,13 @@ namespace Sin_Engine
         static void Main()
         {
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            GameForm game = new GameForm();
+            Application.SetCompatibleTextRenderingDefault(false);            
+#if DEBUG 
+            UnitTesting.StatTest(UnitTesting.eTestModule.eGameTest);
+#else            
+            game = new GameForm();
             game.StartGame();
+#endif
             /*using (GameForm game = new GameForm())
             {
                 if (1 > 2) //some error 
@@ -38,10 +41,10 @@ namespace Sin_Engine
 
         }
 
-        //public static GameForm GetGameObject()
-        //{
-        //    //return game;
-        //}
+        public static GameForm GetGameObject()
+        {
+            return game;
+        }
         #endregion
 
     }

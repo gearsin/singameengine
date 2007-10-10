@@ -194,34 +194,41 @@ namespace Sin_Engine.Shaders
 		{
 			Reload();
             //create VB 
-            vbScreen = new VertexBuffer(
-                typeof(CustomVertex.PositionTextured),
-                4,
-                GameForm.DirectXDevice,
-                Usage.WriteOnly,
-                CustomVertex.PositionTextured.Format,
-                Pool.Managed);
+            try
+            {
+                vbScreen = new VertexBuffer(
+                    typeof(CustomVertex.PositionTextured),
+                    4,
+                    GameForm.DirectXDevice,
+                    Usage.WriteOnly,
+                    CustomVertex.PositionTextured.Format,
+                    Pool.Managed);
 
-            GraphicsStream gfxStream = vbScreen.Lock(0, 0, 0);
-            CustomVertex.PositionTextured[] vertices =
-                new CustomVertex.PositionTextured[]
-				{
-					new CustomVertex.PositionTextured(
-					new Vector3(-1.0f, -1.0f, 0.5f),
-					0, 1),
-					new CustomVertex.PositionTextured(
-					new Vector3(-1.0f, 1.0f, 0.5f),
-					0, 0),
-					new CustomVertex.PositionTextured(
-					new Vector3(1.0f, -1.0f, 0.5f),
-					1, 1),
-					new CustomVertex.PositionTextured(
-					new Vector3(1.0f, 1.0f, 0.5f),
-					1, 0),
-				};
+                GraphicsStream gfxStream = vbScreen.Lock(0, 0, 0);
+                CustomVertex.PositionTextured[] vertices =
+                    new CustomVertex.PositionTextured[]
+				    {
+					    new CustomVertex.PositionTextured(
+					    new Vector3(-1.0f, -1.0f, 0.5f),
+					    0, 1),
+					    new CustomVertex.PositionTextured(
+					    new Vector3(-1.0f, 1.0f, 0.5f),
+					    0, 0),
+					    new CustomVertex.PositionTextured(
+					    new Vector3(1.0f, -1.0f, 0.5f),
+					    1, 1),
+					    new CustomVertex.PositionTextured(
+					    new Vector3(1.0f, 1.0f, 0.5f),
+					    1, 0),
+				    };
+                gfxStream.Write(vertices);
+                vbScreen.Unlock();
 
-            gfxStream.Write(vertices);
-            vbScreen.Unlock();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
 
 		} // PreScreenSkyCubeMapping()
 		#endregion
