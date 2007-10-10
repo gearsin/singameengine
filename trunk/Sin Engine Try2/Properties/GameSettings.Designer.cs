@@ -130,5 +130,41 @@ namespace Sin_Engine.Properties {
                 this["fontSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public float moveCamera {
+            get {
+                return ((float)(this["moveCamera"]));
+            }
+            set {
+                this["moveCamera"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public float rotateCamera {
+            get {
+                return ((float)(this["rotateCamera"]));
+            }
+            set {
+                this["rotateCamera"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.015")]
+        public float mouseRoateFactor {
+            get {
+                return ((float)(this["mouseRoateFactor"]));
+            }
+            set {
+                this["mouseRoateFactor"] = value;
+            }
+        }
     }
 }
